@@ -15,3 +15,11 @@ As **/usr/share** is a system-wide directory that appears on **every** GNU\Linux
 ### How to run?
 Simply clone that git, and run:
 > ./lgso.sh
+
+### How to contribute?
+If you have ideas how to improve the code, please post a pull request.  
+If you have a save location to suggest, please use the "SAVE" tag and use the following structure:  
+Name of the game:  
+Platform (Steam, gog, etc):  
+Full save location: (I.E. $HOME/game)  
+For everything else, use the correct tag.
