@@ -15,10 +15,10 @@ fi
 echo "LGSO will now start to organize."
 
 # Reads line by line from gamelist.txt
-while read line; do
+curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt | while read line; do
 
-# Increase counter - needed to determine if the vars are ready to work with.
-let COUNTER=COUNTER+1
+   # Increase counter - needed to determine if the vars are ready to work with.
+   let COUNTER=COUNTER+1
 
    # If line is a game name, it will define it.
    if [[ $line == *#* ]]; then
@@ -41,5 +41,6 @@ let COUNTER=COUNTER+1
          sudo ln -s $NEW_DIR $OLD_DIR
       fi
    fi
-done < gamelist.txt
-echo "LGSO is done :D"
+done
+
+echo "LGSO has moved" $((COUNTER/2)) "games."
