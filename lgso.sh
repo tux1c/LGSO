@@ -1,46 +1,102 @@
 #!/bin/bash
 
-SRC_DIR="/usr/share/games"
+version=1.0
+
+SRC_DIR="$HOME/.local/share/games"
 NEW_DIR=""
 OLD_DIR=""
 COUNTER=0
+OUTPUT=0
+BACKUP=0
+
+# Checks for update.
+curl -s http://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt | while read line; do
+   if [ $version -ne $line]
+      echo "You LGSO version is outdated!"
+      echo "You are using LGSO $version while the most recent version is $line"
+      echo "It is important for you to keep that script up to date!"
+      echo "Please visit https://github.com/Tux1c/LGSO and update to the latest version!"
+   fi
+done
+
+# Checks if too many arguments were sent.
+if [[ $# -gt 5 ]]; then
+   echo "Too many arguments."
+   exit -1
+fi
+
+# Reads arguments.
+for i in $*; do
+   if [ $i == -s ] || [ $i == -silent ]; then
+      OUTPUT=-1
+   elif [ $i == -v ] || [ $i == -verbose ]; then
+      OUTPUT=1
+   elif [ $i == -b ] || [ $i == -backup ]; then
+      BACKUP=1
+   elif [ $i == -d ] || [ $i == -dir ]; then
+      echo dir
+   elif [[ $i == *-* ]]; then
+      echo "Unknown parameter $i, aborting."
+      exit -1
+   fi
+done
 
 # Checks if SRC_DIR exists, if not, creates it.
 if [ ! -d "$SRC_DIR" ]; then
-   echo "LGSO will now ask you for your root password in order to create the needed files, it may ask for it again, depending on your SUDO settings."
-   sudo mkdir $SRC_DIR
+   mkdir $SRC_DIR
 fi
 
-# Analyzes games and organizes.
-echo "LGSO will now start to organize."
+# Checks if -s flag is off, if so, echoes.
+if [[ $OUTPUT -ne -1 ]]; then
+   echo "LGSO is now organizing your savefiles..."
+fi
 
-# Reads line by line from gamelist.txt
+# Reads line by line from the online database.
 curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt | while read line; do
 
-   # Increase counter - needed to determine if the vars are ready to work with.
+   # Increases counter - needed to determine if the vars are ready to work with.
    let COUNTER=COUNTER+1
 
-   # If line is a game name, it will define it.
+   # Checks if line is a game name or a save location.
    if [[ $line == *#* ]]; then
-      NEW_DIR=$SRC_DIR
-      NEW_DIR+="/"
-      NEW_DIR+=${line:2}
+      NEW_DIR=$SRC_DIR/${line:2}
+      if [[ $OUTPUT -eq 1 ]]; then
+         echo "Destination path: $NEW_DIR"
+      fi
    # Else, it will assume the line is a location of the game save.
    else
-      OLD_DIR=$SRC_FOLDER
-      OLD_DIR+=$HOME
-      OLD_DIR+=$line
+     OLD_DIR=$HOME$line
+     if [[ $OUTPUT -eq 1 ]]; then
+        echo "Source path: $OLD_DIR"
+     fi
    fi
 
-   # Checks if vars are ready to work with & if the save wasn't copied yet.
+   # Checks if vars are ready to work with && if the save wasn't copied yet.
    if [ $((COUNTER%2)) -eq 0 ]; then
       if [ ! -d "$NEW_DIR" ]; then
-         sudo mkdir $NEW_DIR
-         sudo cp -r $OLD_DIR/. $NEW_DIR
-         sudo rm -rf $OLD_DIR
-         sudo ln -s $NEW_DIR $OLD_DIR
+         if [[ $OUTPUT -eq 1 ]]; then
+            echo "Creating $NEW_DIR"
+         fi
+         mkdir $NEW_DIR
+         if [[ $OUTPUT -eq 1 ]]; then
+            echo "Moving $OLD_DIR to $NEW_DIR"
+         fi
+         cp -r $OLD_DIR/. $NEW_DIR
+         if [[ $OUTPUT -eq 1 ]]; then
+            echo "Creating symlink in $OLD_DIR to $NEW_DIR"
+         fi
+         rm -rf $OLD_DIR
+         ln -s $NEW_DIR $OLD_DIR
       fi
    fi
 done
 
-echo "LGSO has moved" $((COUNTER/2)) "games."
+# Checks if -s flag is off, if so, echoes.
+if [[ $OUTPUT -ne -1 ]]; then
+   echo "LGSO has moved $((COUNTER/2)) games".
+fi
+
+# Checks if -b flag is on, if so, backs up.
+if [[ $BACKUP -eq 1 ]]; then
+   echo "Backing up"
+fi
