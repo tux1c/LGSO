@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=1.0
+version=1.1
 
 SRC_DIR="$HOME/.local/share/games"
 NEW_DIR=""
@@ -46,7 +46,6 @@ if [ ! -d "$SRC_DIR" ]; then
    mkdir $SRC_DIR
 fi
 
-# Checks if -s flag is off, if so, echoes.
 if [[ $OUTPUT -ne -1 ]]; then
    echo "LGSO is now organizing your savefiles..."
 fi
@@ -57,7 +56,7 @@ curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles
    # Increases counter - needed to determine if the vars are ready to work with.
    let COUNTER=COUNTER+1
 
-   # Checks if line is a game name or a save location.
+   # Checks if line is a name of a game.
    if [[ $line == *#* ]]; then
       NEW_DIR=$SRC_DIR/${line:2}
       if [[ $OUTPUT -eq 1 ]]; then
@@ -71,13 +70,15 @@ curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles
      fi
    fi
 
-   # Checks if vars are ready to work with && if the save wasn't copied yet.
+   # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
    if [ $((COUNTER%2)) -eq 0 ]; then
-      if [ ! -d "$NEW_DIR" ]; then
-         if [[ $OUTPUT -eq 1 ]]; then
-            echo "Creating $NEW_DIR"
+      if [ -d "$OLD_DIR" ] && [ ! -L "$OLD_DIR" ]; then
+         if [ ! -d "$NEW_DIR" ]; then
+            if [[ $OUTPUT -eq 1 ]]; then
+               echo "Creating $NEW_DIR"
+            fi
+            mkdir $NEW_DIR
          fi
-         mkdir $NEW_DIR
          if [[ $OUTPUT -eq 1 ]]; then
             echo "Moving $OLD_DIR to $NEW_DIR"
          fi
@@ -91,12 +92,12 @@ curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles
    fi
 done
 
-# Checks if -s flag is off, if so, echoes.
 if [[ $OUTPUT -ne -1 ]]; then
    echo "LGSO has moved $((COUNTER/2)) games".
 fi
 
-# Checks if -b flag is on, if so, backs up.
 if [[ $BACKUP -eq 1 ]]; then
-   echo "Backing up"
+   if [[ $OUTPUT -ne -1 ]]; then
+      echo "Backing up"
+   fi
 fi
