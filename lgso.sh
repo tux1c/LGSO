@@ -12,9 +12,9 @@ BACKUP=0
 # Checks for update.
 curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt | while read line; do
    if [[ $(echo "$version < $line"|bc) -eq 1 ]]; then
-      echo "You LGSO version is outdated!"
+      echo "Your LGSO version is outdated!"
       echo "You are using LGSO $version while the most recent version is $line"
-      echo "It is important for you to keep that script up to date!"
+      echo "It is important for you to keep this script up to date!"
       echo "Please visit https://github.com/Tux1c/LGSO and update to the latest version!"
    fi
 done
@@ -47,7 +47,7 @@ if [ ! -d "$SRC_DIR" ]; then
 fi
 
 if [[ $OUTPUT -ne -1 ]]; then
-   echo "LGSO is now organizing your savefiles..."
+   echo "LGSO is now organizing your save files..."
 fi
 
 # Reads line by line from the online database.
