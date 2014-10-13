@@ -12,7 +12,7 @@ So essentially, LGSO takes all of your game saves and stores them in **$HOME/.lo
 ##### Why $HOME/.local/share/games?
 As **$HOME/.local/share** is a system-wide directory that appears on **every** GNU\Linux distribution, I have decided to use the said directory. Although, if for some reason you are **not** satisfied with the said location, you can easily edit the script and replace the location as it is set in the **SRC_DIR** variable.
 
-### How to instal?
+### How to install
 > git clone https://github.com/Tux1c/LGSO.git  
 chmod +x lgso.sh  
 ./lgso.sh
