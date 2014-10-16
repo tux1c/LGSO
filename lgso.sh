@@ -1,45 +1,73 @@
 #!/bin/bash
+# Arranges game saves
 
-version=1.1
+# Current version
+version=1.11
 
+# Variables
 SRC_DIR="$HOME/.local/share/games"
 NEW_DIR=""
 OLD_DIR=""
+
 COUNTER=0
 OUTPUT=0
 BACKUP=0
+RESTORE=0
 
-# Checks for update.
-curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt | while read line; do
-   if [[ $(echo "$version < $line"|bc) -eq 1 ]]; then
+function check_update {
+   if [[ $(echo "$version < $1"|bc) -eq 1 ]]; then
       echo "Your LGSO version is outdated!"
       echo "You are using LGSO $version while the most recent version is $line"
       echo "It is important for you to keep this script up to date!"
       echo "Please visit https://github.com/Tux1c/LGSO and update to the latest version!"
    fi
-done
+}
 
-# Checks if too many arguments were sent.
-if [[ $# -gt 5 ]]; then
-   echo "Too many arguments."
-   exit -1
-fi
+function read_flags {
+   for i in $*; do
+      if [ $i == -s ] || [ $i == -silent ]; then
+         OUTPUT=-1
+      elif [ $i == -v ] || [ $i == -verbose ]; then
+         OUTPUT=1
+      elif [ $i == -b ] || [ $i == -backup ]; then
+         BACKUP=1
+      elif [ $i == -d ] || [ $i == -dir ]; then
+         echo dir
+      elif [ $i == -r ] || [ $i == -restore ]; then
+         RESTORE=1 
+      elif [[ $i == *-* ]]; then
+         echo "Unknown parameter $i, aborting."
+         exit -1
+      fi
+   done
+}
 
-# Reads arguments.
-for i in $*; do
-   if [ $i == -s ] || [ $i == -silent ]; then
-      OUTPUT=-1
-   elif [ $i == -v ] || [ $i == -verbose ]; then
-      OUTPUT=1
-   elif [ $i == -b ] || [ $i == -backup ]; then
-      BACKUP=1
-   elif [ $i == -d ] || [ $i == -dir ]; then
-      echo dir
-   elif [[ $i == *-* ]]; then
-      echo "Unknown parameter $i, aborting."
-      exit -1
+function backup {
+   if [[ $OUTPUT -ne -1 ]]; then
+      echo "Backing up"
    fi
+}
+
+function restore {
+   if [[ $OUTPUT -ne -1 ]]; then
+      echo "Restoring"
+   fi
+
+   exit 0
+}
+
+
+### Actual Code ###
+
+curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt | while read line; do
+   check_update $line
 done
+
+read_flags
+
+if [[ $RESTORE -eq 1 ]]; then
+   restore
+fi
 
 # Checks if SRC_DIR exists, if not, creates it.
 if [ ! -d "$SRC_DIR" ]; then
@@ -97,7 +125,5 @@ if [[ $OUTPUT -ne -1 ]]; then
 fi
 
 if [[ $BACKUP -eq 1 ]]; then
-   if [[ $OUTPUT -ne -1 ]]; then
-      echo "Backing up"
-   fi
+   backup
 fi
