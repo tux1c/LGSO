@@ -2,7 +2,7 @@
 # Arranges game saves
 
 # Current version
-version=1.11
+version=1.2
 
 # Variables
 SRC_DIR="$HOME/.local/share/games"
