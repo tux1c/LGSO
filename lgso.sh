@@ -121,8 +121,7 @@ move_save() {
       echo "Moving $OLD_DIR to $NEW_DIR"
    fi
 
-   rm -rf $NEW_DIR/
-   cp -r $OLD_DIR/. $NEW_DIR
+   mv -f $OLD_DIR $NEW_DIR || return 1
 
    if verify_cp; then
       if [[ $OUTPUT -eq 1 ]]; then
