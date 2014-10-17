@@ -2,7 +2,7 @@
 # Arranges game saves
 
 # Current version
-version=1.2
+version=1.21
 
 # Variables
 SRC_DIR="$HOME/.local/share/games"
@@ -79,7 +79,7 @@ check_update() {
 }
 
 check_XDG() {
-   if [[ ! -z "$var" ]]; then
+   if [[ ! -z "$XDG_DATA_HOME" ]]; then
       SRC_DIR=$XDG_DATA_HOME/games
    fi
 }
