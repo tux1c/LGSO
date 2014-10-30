@@ -21,8 +21,7 @@ chmod +x lgso.sh
 ./lgso.sh
 
 If you want to make LGSO a command, simply run
-> mv lgso.sh lgso  
-sudo mv lgso /usr/bin/
+> sudo mv lgso.sh /usr/bin/lgso
 
 Refer to the wiki for extra flags you can use with LGSO.
 
