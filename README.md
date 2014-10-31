@@ -16,10 +16,10 @@ SRC_DIR is a variable that either follows your $XDG_DATA_HOME, or, incase that y
 As **$HOME/.local/share** is a system-wide directory that appears on **every** GNU/Linux distribution, I have decided to use the said directory. Although, if for some reason you are **not** satisfied with the said location, you can easily edit the script and replace the location as it is set in the **SRC_DIR** variable.
 
 ### How to install
-Recommended way:  
+####Recommended way:  
 Head to [https://github.com/Tux1c/LGSO/releases](https://github.com/Tux1c/LGSO/releases) and download and unpack the latest release.  
   
-Alternative way (will download the latest version automatically, but there is no guarantee that this version is stable):
+####Alternative way (will download the latest version automatically, but there is no guarantee that this version is stable):
 > git clone https://github.com/Tux1c/LGSO.git  
 chmod +x lgso.sh  
 ./lgso.sh
