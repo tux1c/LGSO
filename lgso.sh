@@ -104,25 +104,21 @@ read_flags() {
 }
 
 move_save() {
-   if [ ! -d "$NEW_DIR" ]; then
-      if [[ $OUTPUT -eq 1 ]]; then
-         echo "Source path: $OLD_DIR"
-         echo "Destination path: $NEW_DIR"
-      fi
-
-      if [[ $OUTPUT -eq 1 ]]; then
-         echo "Creating $NEW_DIR"
-      fi
-
-      mkdir $NEW_DIR
+   if [ -d "$NEW_DIR" ]; then
+      echo "Error: Directory $NEW_DIR already exists. If you want to overwrite saved games in this directory, please remove it manually." >/dev/stderr
+      return 1
+   elif
+   
+   if [[ $OUTPUT -eq 1 ]]; then
+      echo "Source path: $OLD_DIR"
+      echo "Destination path: $NEW_DIR"
    fi
 
    if [[ $OUTPUT -eq 1 ]]; then
       echo "Moving $OLD_DIR to $NEW_DIR"
    fi
 
-   rm -rf $NEW_DIR/
-   cp -r $OLD_DIR/. $NEW_DIR
+   mv -f $OLD_DIR $NEW_DIR || return 1
 
    if verify_cp; then
       if [[ $OUTPUT -eq 1 ]]; then
