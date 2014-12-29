@@ -85,21 +85,18 @@ check_XDG() {
 }
 
 read_flags() {
-   for i in $*; do
-      if [ $i == -s ] || [ $i == -silent ]; then
-         OUTPUT=-1
-      elif [ $i == -v ] || [ $i == -verbose ]; then
-         OUTPUT=1
-      elif [ $i == -b ] || [ $i == -backup ]; then
-         BACKUP=1
-      elif [ $i == -d ] || [ $i == -dir ]; then
-         echo dir
-      elif [ $i == -r ] || [ $i == -restore ]; then
-         RESTORE=1 
-      elif [[ $i == *-* ]]; then
-         echo "Unknown parameter $i, aborting."
-         exit 1
-      fi
+   for i in $@; do
+      case "$i" in
+         -s|-silent) OUTPUT=-1;;
+         -v|-verbose) OUTPUT=1;;
+         -b|-backup) BACKUP=1;;
+         -d|-dir) echo dir;;
+         -r|-restore) RESTORE=1;;
+         *)
+            echo "Unknown parameter $i, aborting."
+            exit 1
+            ;;
+      esac
    done
 }
 
