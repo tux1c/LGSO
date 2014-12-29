@@ -121,7 +121,7 @@ move_save() {
    fi
 
    rm -rf "$NEW_DIR/"
-   cp -r "$OLD_DIR/." "$NEW_DIR"
+   cp -a "$OLD_DIR/." "$NEW_DIR"
 
    if verify_cp "$NEW_DIR" "$OLD_DIR"; then
       if [[ "$OUTPUT" -eq 1 ]]; then
