@@ -9,7 +9,7 @@ SRC_DIR="$HOME/.local/share/games"
 NEW_DIR=""
 OLD_DIR=""
 
-COUNTER=0
+
 MOVED=0
 OUTPUT=0
 BACKUP=0
@@ -37,11 +37,13 @@ main() {
       echo "LGSO is now organizing your save files..."
    fi
 
+   COUNTER=0
+
    # Reads line by line from the online database.
    curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt | while read line; do
 
       # Increases counter - needed to determine if the vars are ready to work with.
-      let COUNTER=COUNTER+1
+      let ++COUNTER
 
       # Checks if line is a name of a game.
       if [[ "$line" =~ ^# ]]; then
@@ -52,8 +54,8 @@ main() {
       fi
 
       # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
-      if [ $((COUNTER%2)) -eq 0 ]; then
-         if [ -d "$OLD_DIR" ] && [ ! -L "$OLD_DIR" ]; then
+      if (( COUNTER%2 == 0 )); then
+         if [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
             move_save
          fi
       fi
@@ -132,7 +134,7 @@ move_save() {
       move_save
    fi
 
-   let MOVED=MOVED+1
+   let ++MOVED
 }
 
 verify_cp() {
