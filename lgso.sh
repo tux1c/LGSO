@@ -130,8 +130,8 @@ move_save() {
       rm -rf "$OLD_DIR"
       ln -s "$NEW_DIR" "$OLD_DIR"
    else
-      echo "Failed to move $OLD_DIR, retrying!"
-      move_save
+      echo "Failed to move $OLD_DIR, cleaning up"
+      rm -fr "$NEW_DIR"
    fi
 
    let ++MOVED
