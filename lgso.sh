@@ -16,9 +16,7 @@ DRYRUN=0
 
 
 main() {
-   curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt | while read line; do
-      check_update "$line"
-   done
+   check_update "$(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt)"
 
    read_flags "$@"
 
