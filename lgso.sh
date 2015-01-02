@@ -40,8 +40,7 @@ main() {
    local NEW_DIR=""
 
    # Reads line by line from the online database.
-   curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt | while read line; do
-
+   while read -r line; do
       # Increases counter - needed to determine if the vars are ready to work with.
       let ++COUNTER
 
@@ -60,7 +59,7 @@ main() {
          [[ "$OUTPUT" -eq 1 ]] \
             && echo ""
       fi
-   done
+   done < <(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt)
 
    if [[ "$OUTPUT" -ne -1 ]]; then
       echo "LGSO has moved $MOVED games".
