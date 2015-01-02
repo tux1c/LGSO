@@ -105,9 +105,6 @@ move_save() {
       if [[ "$OUTPUT" -eq 1 ]]; then
          echo "Source path: $OLD_DIR"
          echo "Destination path: $NEW_DIR"
-      fi
-
-      if [[ "$OUTPUT" -eq 1 ]]; then
          echo "Creating $NEW_DIR"
       fi
 
@@ -115,22 +112,23 @@ move_save() {
    fi
 
    if [[ "$OUTPUT" -eq 1 ]]; then
-      echo "Moving $OLD_DIR to $NEW_DIR"
+      echo "Copying $OLD_DIR to $NEW_DIR"
    fi
 
    rm -rf "$NEW_DIR/"
    cp -a "$OLD_DIR/." "$NEW_DIR"
 
-   if verify_cp "$NEW_DIR" "$OLD_DIR"; then
-      if [[ "$OUTPUT" -eq 1 ]]; then
-         echo "Creating symlink in $OLD_DIR to $NEW_DIR"
-      fi
-      rm -rf "$OLD_DIR"
-      ln -s "$NEW_DIR" "$OLD_DIR"
-   else
-      echo "Failed to move $OLD_DIR, cleaning up"
+   if ! verify_cp "$NEW_DIR" "$OLD_DIR"; then
+      echo "Failed to copy $OLD_DIR, cleaning up"
       rm -fr "$NEW_DIR"
+      return
    fi
+
+   if [[ "$OUTPUT" -eq 1 ]]; then
+      echo "Creating symlink in $OLD_DIR to $NEW_DIR"
+   fi
+   rm -rf "$OLD_DIR"
+   ln -s "$NEW_DIR" "$OLD_DIR"
 
    let ++MOVED
 }
