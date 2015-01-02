@@ -9,7 +9,6 @@ XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 readonly SRC_DIR="$XDG_DATA_HOME/games"
 
 
-MOVED=0
 OUTPUT=0
 BACKUP=0
 RESTORE=0
@@ -35,7 +34,8 @@ main() {
       echo "LGSO is now organizing your save files..."
    fi
 
-   COUNTER=0
+   local COUNTER=0
+   local MOVED=0
 
    local OLD_DIR=""
    local NEW_DIR=""
@@ -55,10 +55,9 @@ main() {
       fi
 
       # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
-      if (( COUNTER%2 == 0 )); then
-         if [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
-            move_save "$OLD_DIR" "$NEW_DIR"
-         fi
+      if (( COUNTER%2 == 0 )) && [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
+         move_save "$OLD_DIR" "$NEW_DIR" \
+            && let ++MOVED
       fi
    done
 
@@ -121,7 +120,7 @@ move_save() {
    if ! verify_cp "$NEW_DIR" "$OLD_DIR"; then
       echo "Failed to copy $OLD_DIR, cleaning up"
       rm -fr "$NEW_DIR"
-      return
+      return 1
    fi
 
    if [[ "$OUTPUT" -eq 1 ]]; then
@@ -130,7 +129,7 @@ move_save() {
    rm -rf "$OLD_DIR"
    ln -s "$NEW_DIR" "$OLD_DIR"
 
-   let ++MOVED
+   return 0
 }
 
 verify_cp() {
