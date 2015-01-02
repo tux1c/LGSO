@@ -144,12 +144,12 @@ backup() {
    if [[ "$OUTPUT" -ne -1 ]]; then
       echo "LGSO will now backup your save files"
    fi
-   if [ -f "$SRC_DIR/backup.tar.gz" ]; then
-      rm "$SRC_DIR/backup_old.tar.gz" > /dev/null 2>&1
-      mv "$SRC_DIR/backup.tar.gz" "$SRC_DIR/backup_old.tar.gz"
+   if [[ -f "$XDG_DATA_HOME/games_backup.tar.gz" ]]; then
+      rm "$XDG_DATA_HOME/games_backup_old.tar.gz" >/dev/null 2>&1
+      mv "$XDG_DATA_HOME/games_backup.tar.gz" "$XDG_DATA_HOME/games_backup_old.tar.gz"
    fi
 
-   tar czf "$SRC_DIR/backup.tar.gz" $SRC_DIR/* > /dev/null 2>&1
+   tar czf "$XDG_DATA_HOME/games_backup.tar.gz" "$SRC_DIR" >/dev/null 2>&1
 }
 
 restore() {
