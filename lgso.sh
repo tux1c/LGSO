@@ -5,7 +5,8 @@
 version=1.21
 
 # Variables
-SRC_DIR="$HOME/.local/share/games"
+XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+readonly SRC_DIR="$XDG_DATA_HOME/games"
 NEW_DIR=""
 OLD_DIR=""
 
@@ -21,7 +22,6 @@ main() {
       check_update "$line"
    done
 
-   check_XDG
    read_flags "$@"
 
    if [[ "$RESTORE" -eq 1 ]]; then
@@ -77,12 +77,6 @@ check_update() {
       echo "It is important for you to keep this script up to date!"
       echo "Please visit https://github.com/Tux1c/LGSO and update to the latest version!"
       exit 1
-   fi
-}
-
-check_XDG() {
-   if [[ -n "$XDG_DATA_HOME" ]]; then
-      SRC_DIR="$XDG_DATA_HOME/games"
    fi
 }
 
