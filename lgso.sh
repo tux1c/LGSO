@@ -59,6 +59,8 @@ main() {
       if (( COUNTER%2 == 0 )) && [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
          move_save "$OLD_DIR" "$NEW_DIR" \
             && let ++MOVED
+         [[ "$OUTPUT" -eq 1 ]] \
+            && echo ""
       fi
    done
 
