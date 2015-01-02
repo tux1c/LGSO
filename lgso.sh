@@ -12,6 +12,7 @@ readonly SRC_DIR="$XDG_DATA_HOME/games"
 OUTPUT=0
 BACKUP=0
 RESTORE=0
+DRYRUN=0
 
 
 main() {
@@ -27,7 +28,7 @@ main() {
 
    # Checks if SRC_DIR exists, if not, creates it.
    if [ ! -d "$SRC_DIR" ]; then
-      mkdir -p "$SRC_DIR"
+      run mkdir -p "$SRC_DIR"
    fi
 
    if [[ "$OUTPUT" -ne -1 ]]; then
@@ -70,6 +71,14 @@ main() {
    fi
 }
 
+run() {
+    if (( "$DRYRUN" == 0 )); then
+        "$@"
+    else
+        echo "$@"
+    fi
+}
+
 check_update() {
    if [[ $(echo "$version < $1"|bc) -eq 1 ]]; then
       echo "Your LGSO version is outdated!"
@@ -87,6 +96,7 @@ read_flags() {
          -v|-verbose) OUTPUT=1;;
          -b|-backup) BACKUP=1;;
          -d|-dir) echo dir;;
+         -D|-dry-run) DRYRUN=1;;
          -r|-restore) RESTORE=1;;
          *)
             echo "Unknown parameter $i, aborting."
@@ -107,32 +117,34 @@ move_save() {
          echo "Creating $NEW_DIR"
       fi
 
-      mkdir "$NEW_DIR"
+      run mkdir "$NEW_DIR"
    fi
 
    if [[ "$OUTPUT" -eq 1 ]]; then
       echo "Copying $OLD_DIR to $NEW_DIR"
    fi
 
-   rm -rf "$NEW_DIR/"
-   cp -a "$OLD_DIR/." "$NEW_DIR"
+   run rm -rf "$NEW_DIR/"
+   run cp -a "$OLD_DIR/." "$NEW_DIR"
 
    if ! verify_cp "$NEW_DIR" "$OLD_DIR"; then
       echo "Failed to copy $OLD_DIR, cleaning up"
-      rm -fr "$NEW_DIR"
+      run rm -fr "$NEW_DIR"
       return 1
    fi
 
    if [[ "$OUTPUT" -eq 1 ]]; then
       echo "Creating symlink in $OLD_DIR to $NEW_DIR"
    fi
-   rm -rf "$OLD_DIR"
-   ln -s "$NEW_DIR" "$OLD_DIR"
+   run rm -rf "$OLD_DIR"
+   run ln -s "$NEW_DIR" "$OLD_DIR"
 
    return 0
 }
 
 verify_cp() {
+   (( "$DRYRUN" == 1 )) \
+      && return 0
    diff -qr "$1" "$2" > /dev/null 2>&1
    return $?
 }
@@ -142,11 +154,11 @@ backup() {
       echo "LGSO will now backup your save files"
    fi
    if [[ -f "$XDG_DATA_HOME/games_backup.tar.gz" ]]; then
-      rm "$XDG_DATA_HOME/games_backup_old.tar.gz" >/dev/null 2>&1
-      mv "$XDG_DATA_HOME/games_backup.tar.gz" "$XDG_DATA_HOME/games_backup_old.tar.gz"
+      run rm "$XDG_DATA_HOME/games_backup_old.tar.gz" >/dev/null 2>&1
+      run mv "$XDG_DATA_HOME/games_backup.tar.gz" "$XDG_DATA_HOME/games_backup_old.tar.gz"
    fi
 
-   tar czf "$XDG_DATA_HOME/games_backup.tar.gz" "$SRC_DIR" >/dev/null 2>&1
+   run tar czf "$XDG_DATA_HOME/games_backup.tar.gz" "$SRC_DIR" >/dev/null 2>&1
 }
 
 restore() {
