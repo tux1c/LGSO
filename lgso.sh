@@ -7,8 +7,6 @@ version=1.21
 # Variables
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 readonly SRC_DIR="$XDG_DATA_HOME/games"
-NEW_DIR=""
-OLD_DIR=""
 
 
 MOVED=0
@@ -39,6 +37,9 @@ main() {
 
    COUNTER=0
 
+   local OLD_DIR=""
+   local NEW_DIR=""
+
    # Reads line by line from the online database.
    curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt | while read line; do
 
@@ -50,13 +51,13 @@ main() {
          NEW_DIR="${SRC_DIR}/${line:2}"
       # Else, it will assume the line is a location of the game save.
       else
-        OLD_DIR="${HOME}${line}"
+         OLD_DIR="${HOME}${line}"
       fi
 
       # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
       if (( COUNTER%2 == 0 )); then
          if [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
-            move_save
+            move_save "$OLD_DIR" "$NEW_DIR"
          fi
       fi
    done
@@ -97,6 +98,9 @@ read_flags() {
 }
 
 move_save() {
+   local -r OLD_DIR="$1"
+   local -r NEW_DIR="$2"
+
    if [[ ! -d "$NEW_DIR" ]]; then
       if [[ "$OUTPUT" -eq 1 ]]; then
          echo "Source path: $OLD_DIR"
