@@ -113,10 +113,7 @@ move_save() {
       if [[ "$OUTPUT" -eq 1 ]]; then
          echo "Source path: $OLD_DIR"
          echo "Destination path: $NEW_DIR"
-         echo "Creating $NEW_DIR"
       fi
-
-      run mkdir "$NEW_DIR"
    fi
 
    if [[ "$OUTPUT" -eq 1 ]]; then
