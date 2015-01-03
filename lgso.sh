@@ -79,9 +79,12 @@ run() {
 }
 
 check_update() {
-   if [[ $(echo "$version < $1"|bc) -eq 1 ]]; then
+   [[ "$1" == "$version" ]] \
+      && return
+
+   if [[ "$(printf "${version}\n${1}"| sort -V)" == "$(printf "${version}\n${1}")" ]]; then
       echo "Your LGSO version is outdated!"
-      echo "You are using LGSO $version while the most recent version is $line"
+      echo "You are using LGSO $version while the most recent version is $1"
       echo "It is important for you to keep this script up to date!"
       echo "Please visit https://github.com/Tux1c/LGSO and update to the latest version!"
       exit 1
