@@ -1,8 +1,9 @@
 #!/bin/bash
-# Arranges game saves
+# Linux Game Saves Organizer - A script that organizes game saves.
+# Copyright (C) 2014 Yan A.
 
 # Current version
-version=1.21
+version=1.30
 
 # Variables
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
