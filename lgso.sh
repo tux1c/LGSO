@@ -113,14 +113,9 @@ move_save() {
    local -r OLD_DIR="$1"
    local -r NEW_DIR="$2"
 
-   if [[ ! -d "$NEW_DIR" ]]; then
-      if [[ "$OUTPUT" -eq 1 ]]; then
-         echo "Source path: $OLD_DIR"
-         echo "Destination path: $NEW_DIR"
-      fi
-   fi
-
    if [[ "$OUTPUT" -eq 1 ]]; then
+      echo "Source path: $OLD_DIR"
+      echo "Destination path: $NEW_DIR"
       echo "Copying $OLD_DIR to $NEW_DIR"
    fi
 
