@@ -123,7 +123,9 @@ move_save() {
    run cp -a "$OLD_DIR/." "$NEW_DIR"
 
    if ! verify_cp "$NEW_DIR" "$OLD_DIR"; then
-      echo "Failed to copy $OLD_DIR, cleaning up"
+      if [[ "$OUTPUT" -ne -1 ]]; then
+         echo "Failed to copy $OLD_DIR, cleaning up"
+      fi
       run rm -fr "$NEW_DIR"
       return 1
    fi
