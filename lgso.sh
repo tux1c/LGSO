@@ -48,9 +48,6 @@ main() {
       # Checks if line is a name of a game.
       if [[ "$line" =~ ^# ]]; then
          NEW_DIR="${SRC_DIR}/${line:2}"
-         if [[ "$OUTPUT" -eq 1 ]]; then
-            echo "LGSO tries to move ${line:2}"
-         fi
       # Else, it will assume the line is a location of the game save.
       else
          OLD_DIR="${HOME}${line}"
@@ -138,7 +135,7 @@ move_save() {
    fi
    run rm -rf "$OLD_DIR"
    run ln -s "$NEW_DIR" "$OLD_DIR"
-
+   
    return 0
 }
 
@@ -191,9 +188,6 @@ restore() {
       # Checks if line is a name of a game.
       if [[ "$line" =~ ^# ]]; then
          NEW_DIR="${SRC_DIR}/${line:2}"
-         if [[ "$OUTPUT" -eq 1 ]]; then
-            echo "LGSO tries to restore ${line:2}"
-         fi
       # Else, it will assume the line is a location of the game save.
       else
          OLD_DIR="${HOME}${line}"
