@@ -200,7 +200,7 @@ restore() {
       fi
 
       # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
-      if (( COUNTER%2 == 0 )); then
+      if (( COUNTER%2 == 0 )) && [[ -d "$NEW_DIR" ]]; then
          restore_save "$OLD_DIR" "$NEW_DIR" 
          [[ "$OUTPUT" -eq 1 ]] \
             && echo ""
