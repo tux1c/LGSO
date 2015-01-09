@@ -139,6 +139,20 @@ move_save() {
    return 0
 }
 
+restore_save() {
+   local -r OLD_DIR="$1"
+   local -r NEW_DIR="$2"
+
+   if [[ "$OUTPUT" -eq 1 ]]; then
+      echo "Backed up save path: $NEW_DIR"
+      echo "Actual game save path: $OLD_DIR"
+   fi
+
+   run ln -s "$NEW_DIR" "$OLD_DIR"
+
+   return 0
+}
+
 verify_cp() {
    (( "$DRYRUN" == 1 )) \
       && return 0
@@ -162,6 +176,28 @@ restore() {
    if [[ "$OUTPUT" -ne -1 ]]; then
       echo "Restoring"
    fi
+   
+   # Unpack the tar here and overwrite everything
+   
+   while read -r line; do
+      # Increases counter - needed to determine if the vars are ready to work with.
+      let ++COUNTER
+
+      # Checks if line is a name of a game.
+      if [[ "$line" =~ ^# ]]; then
+         NEW_DIR="${SRC_DIR}/${line:2}"
+      # Else, it will assume the line is a location of the game save.
+      else
+         OLD_DIR="${HOME}${line}"
+      fi
+
+      # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
+      if (( COUNTER%2 == 0 )) && [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
+         restore_save "$OLD_DIR" "$NEW_DIR" 
+         [[ "$OUTPUT" -eq 1 ]] \
+            && echo ""
+      fi
+   done < <(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt)
 
    exit 0
 }
