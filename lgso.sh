@@ -147,8 +147,10 @@ restore_save() {
       echo "Backed up save path: $NEW_DIR"
       echo "Actual game save path: $OLD_DIR"
    fi
-
-   run ln -s "$NEW_DIR" "$OLD_DIR"
+   
+   if [[ ! -e "$OLD_DIR" ]]; then
+      run ln -s "$NEW_DIR" "$OLD_DIR"
+   fi
 
    return 0
 }
