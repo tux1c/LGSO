@@ -81,6 +81,8 @@ main() {
    if [[ "$BACKUP" -eq 1 ]]; then
       backup
    fi
+   
+   exit 0
 }
 
 run() {
@@ -139,7 +141,7 @@ printhelp() {
    echo "1  if problems"
    echo ""
    echo "Report LGSO bugs to https://github.com/Tux1c/LGSO"
-   exit 1
+   exit 0
 }
 
 printversion() {
@@ -150,6 +152,7 @@ printversion() {
         There is NO WARRANTY, to the extent permitted by law.\n"
    echo ""
    echo "Written by Yan A. (A.K.A. Tux1c)"
+   exit 0
 }
 
 move_save() {
