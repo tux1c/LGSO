@@ -107,18 +107,49 @@ check_update() {
 read_flags() {
    for i in $@; do
       case "$i" in
-         -s|-silent) OUTPUT=-1;;
-         -v|-verbose) OUTPUT=1;;
-         -b|-backup) BACKUP=1;;
-         -d|-dir) echo dir;;
-         -D|-dry-run) DRYRUN=1;;
-         -r|-restore) RESTORE=1;;
+         -s|--silent) OUTPUT=-1;;
+         -v|--verbose) OUTPUT=1;;
+         -V|--version) printversion;;
+         -b|--backup) BACKUP=1;;
+         -D|--dry-run) DRYRUN=1;;
+         -h|--help) printhelp;;
+         -r|--restore) RESTORE=1;;
          *)
             echo "Unknown parameter $i, aborting."
             exit 1
             ;;
       esac
    done
+}
+
+printhelp() {
+   echo "Usage: lgso [OPTION] ..."
+   echo "Organize game saves.\n"
+   echo "Options:"
+   echo "-b, --backup        backup game saves into a tar."
+   echo "-D, --dry-run       run a dry-run of LGSO, only prints the commands it will originally execute, doesn't actually execute them."
+   echo "-h, --help          display this help and exit."
+   echo "-r, --restore       restore previously backed up game saves."
+   echo "-s, --silent        do not show output."
+   echo "-v, --verbose       show extra output with more info."
+   echo "-V, --version       output version information and exit."
+   echo ""
+   echo "Exit status:"
+   echo "0  if OK,"
+   echo "1  if problems"
+   echo ""
+   echo "Report LGSO bugs to https://github.com/Tux1c/LGSO"
+   exit 1
+}
+
+printversion() {
+   echo "LGSO $version"
+   echo "Copyright (C) 2014 Tux1c."
+   echo "License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>. \n
+        This is free software: you are free to change and redistribute it.\n
+        There is NO WARRANTY, to the extent permitted by law.\n"
+   echo ""
+   echo "Written by Yan A. (A.K.A. Tux1c)"
 }
 
 move_save() {
