@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Current version
-version=1.30
+version=1.40
 
 # Variables
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
@@ -118,7 +118,7 @@ read_flags() {
          -r|--restore) RESTORE=1;;
          *)
             echo "Unknown parameter $i, aborting."
-            exit 1
+            printhelp            
             ;;
       esac
    done
@@ -126,7 +126,8 @@ read_flags() {
 
 printhelp() {
    echo "Usage: lgso [OPTION] ..."
-   echo "Organize game saves.\n"
+   echo "Organize game saves."
+   echo ""
    echo "Options:"
    echo "-b, --backup        backup game saves into a tar."
    echo "-D, --dry-run       run a dry-run of LGSO, only prints the commands it will originally execute, doesn't actually execute them."
@@ -147,9 +148,9 @@ printhelp() {
 printversion() {
    echo "LGSO $version"
    echo "Copyright (C) 2014 Tux1c."
-   echo "License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>. \n
-        This is free software: you are free to change and redistribute it.\n
-        There is NO WARRANTY, to the extent permitted by law.\n"
+   echo "License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>.
+        This is free software: you are free to change and redistribute it.
+        There is NO WARRANTY, to the extent permitted by law."
    echo ""
    echo "Written by Yan A. (A.K.A. Tux1c)"
    exit 0
@@ -225,30 +226,44 @@ restore() {
       echo "LGSO is now restoring your save files..."
    fi
    
-   # Unpack the tar here and overwrite everything
+   echo "WARNING: You should use this feature on a fresh install, without game saves in $XDG_DATA_HOME !"
+   echo "Using this function when game saves are already moved by LGSO might cause in data loss!"
+   echo "Run on your own risk!"
+ 
+   echo "Would you like to 'x' [y/n]?"
+   read ans
+
+   if [ $ans = y -o $ans = Y -o $ans = yes -o $ans = Yes -o $ans = YES ]; then
+      while read -r line; do
+         # Increases counter - needed to determine if the vars are ready to work with.
+         let ++COUNTER
+
+         # Checks if line is a name of a game.
+         if [[ "$line" =~ ^# ]]; then
+            NEW_DIR="${SRC_DIR}/${line:2}"
+         # Else, it will assume the line is a location of the game save.
+         else
+            OLD_DIR="${HOME}${line}"
+         fi
+
+         # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
+         if (( COUNTER%2 == 0 )) && [[ -d "$NEW_DIR" ]]; then
+            restore_save "$OLD_DIR" "$NEW_DIR"
+            [[ "$OUTPUT" -eq 1 ]] \
+               && echo ""
+         fi
+      done < <(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt)
+
+      exit 0
+   fi
+
+   if [ $ans = n -o $ans = N -o $ans = no -o $ans = No -o $ans = NO ]; then
+      exit 1
+   fi
    
-   while read -r line; do
-      # Increases counter - needed to determine if the vars are ready to work with.
-      let ++COUNTER
-
-      # Checks if line is a name of a game.
-      if [[ "$line" =~ ^# ]]; then
-         NEW_DIR="${SRC_DIR}/${line:2}"
-      # Else, it will assume the line is a location of the game save.
-      else
-         OLD_DIR="${HOME}${line}"
-      fi
-
-      # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
-      if (( COUNTER%2 == 0 )) && [[ -d "$NEW_DIR" ]]; then
-         restore_save "$OLD_DIR" "$NEW_DIR" 
-         [[ "$OUTPUT" -eq 1 ]] \
-            && echo ""
-      fi
-   done < <(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt)
-
-   exit 0
+   echo "unrecognised response"   
+   exit 1
 }
 
-# Runs LGOS
+#runs LGSO
 main "$@"
