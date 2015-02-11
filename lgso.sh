@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Current version
-version=1.40
+version=1.41
 
 # Variables
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
@@ -230,10 +230,11 @@ restore() {
    echo "Using this function when game saves are already moved by LGSO might cause in data loss!"
    echo "Run on your own risk!"
  
-   echo "Would you like to 'x' [y/n]?"
+   echo "Would you like to continue [y/n]?"
    read ans
 
    if [ $ans = y -o $ans = Y -o $ans = yes -o $ans = Yes -o $ans = YES ]; then
+      run tar -zxvf "$XDG_DATA_HOME/games_backup.tar.gz" "$XDG_DATA_HOME"
       while read -r line; do
          # Increases counter - needed to determine if the vars are ready to work with.
          let ++COUNTER
