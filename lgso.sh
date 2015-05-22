@@ -227,7 +227,7 @@ restore() {
    fi
    
    echo "WARNING: You should use this feature on a fresh install, without game saves in $XDG_DATA_HOME !"
-   echo "Using this function when game saves are already moved by LGSO might cause in data loss!"
+   echo "Using this function when game saves were already moved by LGSO might result in data loss!"
    echo "Run on your own risk!"
  
    echo "Would you like to continue [y/n]?"
@@ -239,7 +239,7 @@ restore() {
          # Increases counter - needed to determine if the vars are ready to work with.
          let ++COUNTER
 
-         # Checks if line is a name of a game.
+         # Checks if a line is a name of a game.
          if [[ "$line" =~ ^# ]]; then
             NEW_DIR="${SRC_DIR}/${line:2}"
          # Else, it will assume the line is a location of the game save.
