@@ -18,14 +18,14 @@ As **$HOME/.local/share** is a system-wide directory that appears on **every** G
 
 ### How to install
 ####Recommended way:  
-Head to [https://github.com/Tux1c/LGSO/releases/latest](https://github.com/Tux1c/LGSO/releases/latest), download and unpack the latest release.  
+Head to <https://github.com/Tux1c/LGSO/releases/latest>, download and unpack the latest release.  
   
 ####Alternative way (will download the latest version automatically, but there is no guarantee that this version is stable):
 > git clone https://github.com/Tux1c/LGSO  
 
 Then (on both cases) simply run:
 > chmod +x lgso.sh  
-./lgso.sh
+> ./lgso.sh
 
 If you want to be able to execute LGSO from any directory, you'll have to add it to your PATH, or move it to a directory already in PATH.
 A good practise is to place the script in ~/.local/bin/ . If, for some reason, the specified directory is not in your PATH, or if after putting LGSO in that directory you're **STILL** unable to execute the script, you'll have to run the following command once:
@@ -34,6 +34,7 @@ And the following command in all of your open terminal sessions:
 > source ~/.bashrc
 Or else just close and reopen all of your currently open terminal sessions.
 If you wish to be able to execute LGSO from any user account, you'll have to place it in /usr/local/bin/ , like so:
+> chmod 755 lgso.sh
 > sudo chown root:root lgso.sh
 > sudo mv lgso.sh /usr/local/bin/lgso
 
@@ -48,6 +49,6 @@ Full save location: (i.e. $HOME/game)
 For everything else, use the right tag.  
   
 ### Documentation
-You can head to [https://github.com/Tux1c/LGSO/wiki/Documentation](https://github.com/Tux1c/LGSO/wiki/Documentation) to view LGSO documentation (although poorly written).
+You can head to <https://github.com/Tux1c/LGSO/wiki/Documentation> to view LGSO documentation (although poorly written).
   
 LGSO currently supports 313 games!
