@@ -30,8 +30,10 @@ Then (on both cases) simply run:
 If you want to be able to execute LGSO from any directory, you'll have to add it to your PATH, or move it to a directory already in PATH.
 A good practise is to place the script in ~/.local/bin/ . If, for some reason, the specified directory is not in your PATH, or if after putting LGSO in that directory you're **STILL** unable to execute the script, you'll have to run the following command once:
 > echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc
+
 And the following command in all of your open terminal sessions:
 > source ~/.bashrc
+
 Or else just close and reopen all of your currently open terminal sessions.
 If you wish to be able to execute LGSO from any user account, you'll have to place it in /usr/local/bin/ , like so:
 > chmod 755 lgso.sh
