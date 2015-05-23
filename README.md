@@ -36,8 +36,8 @@ And the following command in all of your open terminal sessions:
 
 Or else just close and reopen all of your currently open terminal sessions.
 If you wish to be able to execute LGSO from any user account, you'll have to place it in /usr/local/bin/ , like so:
-> chmod 755 lgso.sh
-> sudo chown root:root lgso.sh
+> chmod 755 lgso.sh  
+> sudo chown root:root lgso.sh  
 > sudo mv lgso.sh /usr/local/bin/lgso
 
 Please refer to the wiki for extra flags you can use with LGSO.
