@@ -53,4 +53,4 @@ For everything else, use the right tag.
 ### Documentation
 You can head to <https://github.com/Tux1c/LGSO/wiki/Documentation> to view LGSO documentation (although poorly written).
   
-LGSO currently supports 313 games!
+LGSO currently supports 314 games!
