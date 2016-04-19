@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Current version
-version=1.41
+version=1.42
 
 # Variables
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
@@ -29,7 +29,7 @@ DRYRUN=0
 
 
 main() {
-   check_update "$(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/version.txt)"
+   check_update "$(curl -s https://raw.githubusercontent.com/tux1c/tux1c.github.io/master/projfiles/lgso/version.txt)"
 
    read_flags "$@"
 
@@ -67,7 +67,8 @@ main() {
 
       # Runs check if: variables are ready to work with && LGSO wasn't applied to specific directory. Then creates a new dir (if needed), moves the files and creates a new symlink.
       if (( COUNTER%2 == 0 )) && [[ -d "$OLD_DIR" && ! -L "$OLD_DIR" ]]; then
-         move_save "$OLD_DIR" "$NEW_DIR" \
+	echo "$OLD_DIR"
+	move_save "$OLD_DIR" "$NEW_DIR" \
             && let ++MOVED
          [[ "$OUTPUT" -eq 1 ]] \
             && echo ""
@@ -81,7 +82,7 @@ main() {
    if [[ "$BACKUP" -eq 1 ]]; then
       backup
    fi
-   
+
    exit 0
 }
 
@@ -101,7 +102,7 @@ check_update() {
       echo "Your LGSO version is outdated!"
       echo "You are using LGSO $version while the most recent version is $1"
       echo "It is important for you to keep this script up to date!"
-      echo "Please visit https://github.com/Tux1c/LGSO and update to the latest version!"
+      echo "Please visit https://github.com/tux1c/LGSO and update to the latest version!"
       exit 1
    fi
 }
@@ -118,7 +119,7 @@ read_flags() {
          -r|--restore) RESTORE=1;;
          *)
             echo "Unknown parameter $i, aborting."
-            printhelp            
+            printhelp
             ;;
       esac
    done
@@ -141,18 +142,18 @@ printhelp() {
    echo "0  if OK,"
    echo "1  if problems"
    echo ""
-   echo "Report LGSO bugs to https://github.com/Tux1c/LGSO"
+   echo "Report LGSO bugs to https://github.com/tux1c/LGSO"
    exit 0
 }
 
 printversion() {
    echo "LGSO $version"
-   echo "Copyright (C) 2014 Tux1c."
+   echo "Copyright (C) 2014 tux1c."
    echo "License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>.
         This is free software: you are free to change and redistribute it.
         There is NO WARRANTY, to the extent permitted by law."
    echo ""
-   echo "Written by Yan A. (A.K.A. Tux1c)"
+   echo "Written by Yan A. (A.K.A. tux1c)"
    exit 0
 }
 
@@ -182,7 +183,7 @@ move_save() {
    fi
    run rm -rf "$OLD_DIR"
    run ln -s "$NEW_DIR" "$OLD_DIR"
-   
+
    return 0
 }
 
@@ -194,7 +195,7 @@ restore_save() {
       echo "Backed up save path: $NEW_DIR"
       echo "Actual game save path: $OLD_DIR"
    fi
-   
+
    if [[ ! -e "$OLD_DIR" ]]; then
       run ln -s "$NEW_DIR" "$OLD_DIR"
    fi
@@ -225,11 +226,11 @@ restore() {
    if [[ "$OUTPUT" -ne -1 ]]; then
       echo "LGSO is now restoring your save files..."
    fi
-   
+
    echo "WARNING: You should use this feature on a fresh install, without game saves in $XDG_DATA_HOME !"
-   echo "Using this function when game saves were already moved by LGSO might result in data loss!"
+   echo "Using this function when game saves are already moved by LGSO might cause in data loss!"
    echo "Run on your own risk!"
- 
+
    echo "Would you like to continue [y/n]?"
    read ans
 
@@ -239,7 +240,7 @@ restore() {
          # Increases counter - needed to determine if the vars are ready to work with.
          let ++COUNTER
 
-         # Checks if a line is a name of a game.
+         # Checks if line is a name of a game.
          if [[ "$line" =~ ^# ]]; then
             NEW_DIR="${SRC_DIR}/${line:2}"
          # Else, it will assume the line is a location of the game save.
@@ -253,7 +254,7 @@ restore() {
             [[ "$OUTPUT" -eq 1 ]] \
                && echo ""
          fi
-      done < <(curl -s https://raw.githubusercontent.com/Tux1c/Tux1c.github.io/master/projfiles/lgso/lgsolist.txt)
+      done < <(curl -s https://raw.githubusercontent.com/tux1c/tux1c.github.io/master/projfiles/lgso/lgsolist.txt)
 
       exit 0
    fi
@@ -261,8 +262,8 @@ restore() {
    if [ $ans = n -o $ans = N -o $ans = no -o $ans = No -o $ans = NO ]; then
       exit 1
    fi
-   
-   echo "unrecognised response"   
+
+   echo "unrecognised response"
    exit 1
 }
 
